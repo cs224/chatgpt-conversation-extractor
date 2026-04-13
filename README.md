@@ -5,9 +5,11 @@ Extracts and processes ChatGPT conversation exports into clean, readable markdow
 ## Features
 
 - Processes ChatGPT `conversations.json` export files
+- Works with split export files such as `conversations-000.json`, `conversations-001.json`, etc. when newer exports are partitioned
 - Converts complex conversation graphs to linear transcripts
 - Filters out most system messages (keeps at most one user-system prompt) and hidden/tool messages, except when they contain meaningful content.
 - Preserves code blocks, citations, and file references
+- Extracts URLs from both older conversation-level metadata and newer message-level metadata such as `safe_urls`, `search_result_groups`, and `content_references`
 - Groups conversations by project automatically
 - Handles 6000+ conversations efficiently with detailed logging
 - Visibility to schema evolution for transparency
@@ -27,6 +29,11 @@ Extracts and processes ChatGPT conversation exports into clean, readable markdow
 2. Go to Settings → Data controls → Export data
 3. Click "Export" and wait for the email (usually within 24 hours)
 4. Download and extract `conversations.json` from the ZIP file
+
+Note:
+
+- Some newer exports, especially Privacy Portal exports, may place chat data in split files such as `conversations-000.json`, `conversations-001.json`, etc. instead of one top-level `conversations.json`.
+- This tool can be run against each split file separately and write into the same output directory.
 
 ## Quick Start
 
@@ -117,6 +124,7 @@ Structured data with:
 - **Graph traversal**: Uses backward traversal to reconstruct active conversation path
 - **Content filtering**: Removes tool messages, thoughts, and hidden system content
 - **Message merging**: Combines consecutive assistant messages
+- **URL extraction**: Reads citations, content URL fields, conversation-level `safe_urls`, and newer message metadata structures like `safe_urls`, `search_result_groups`, and `content_references`
 - **Project detection**: Groups by `conversation_template_id` pattern
 - **Error handling**: Comprehensive logging with recovery mechanisms
 
